@@ -1,0 +1,120 @@
+{
+  "tools": [
+    {
+      "name": "read_csv_info",
+      "description": "读取CSV文件的基本信息，包括行列数、列名等",
+      "parameters": {
+        "file_path": {
+          "type": "string",
+          "description": "CSV文件路径"
+        }
+      },
+      "required": ["file_path"]
+    },
+    {
+      "name": "filter_csv_data",
+      "description": "根据条件筛选CSV数据，支持单条件或多条件筛选",
+      "parameters": {
+        "file_path": {
+          "type": "string", 
+          "description": "CSV文件路径"
+        },
+        "conditions": {
+          "type": "array",
+          "description": "多条件列表，每个条件为对象{column, operator, value}",
+          "items": {
+            "type": "object",
+            "properties": {
+              "column": {
+                "type": "string",
+                "description": "要筛选的列名"
+              },
+              "operator": {
+                "type": "string",
+                "description": "操作符（=, !=, >, <, >=, <=, contains）"
+              },
+              "value": {
+                "type": "string",
+                "description": "筛选值"
+              }
+            }
+          }
+        },
+        "column": {
+          "type": "string",
+          "description": "单个筛选的列名（向后兼容）"
+        },
+        "operator": {
+          "type": "string",
+          "description": "操作符（=, !=, >, <, >=, <=, contains）"
+        },
+        "value": {
+          "type": "string",
+          "description": "单个筛选的值（向后兼容）"
+        }
+      },
+      "required": ["file_path"],
+      "anyOf": [
+        {"required": ["conditions"]},
+        {"required": ["column", "operator", "value"]}
+      ]
+    },
+    {
+      "name": "calculate_csv_data",
+      "description": "对CSV数据进行计算操作（求和、平均值、计数等）",
+      "parameters": {
+        "file_path": {
+          "type": "string",
+          "description": "CSV文件路径"
+        },
+        "column": {
+          "type": "string",
+          "description": "要计算的列名"
+        },
+        "operation": {
+          "type": "string", 
+          "description": "计算操作（sum, avg, count, min, max）"
+        },
+        "filter_column": {
+          "type": "string",
+          "description": "筛选列名（可选）"
+        },
+        "filter_value": {
+          "type": "string",
+          "description": "筛选值（可选）"
+        }
+      },
+      "required": ["file_path", "column", "operation"]
+    },
+    {
+      "name": "write_to_csv",
+      "description": "将问题和答案写入CSV文件的query和answer两列",
+      "parameters": {
+        "file_path": {
+          "type": "string",
+          "description": "目标CSV文件路径"
+        },
+        "query": {
+          "type": "string",
+          "description": "问题文本"
+        },
+        "answer": {
+          "type": "string",
+          "description": "答案文本"
+        }
+      },
+      "required": ["file_path", "query", "answer"]
+    },
+    {
+      "name": "task_done",
+      "description": "标记任务完成，结束agent工作流程",
+      "parameters": {
+        "message": {
+          "type": "string",
+          "description": "任务完成信息"
+        }
+      },
+      "required": ["message"]
+    }
+  ]
+}
